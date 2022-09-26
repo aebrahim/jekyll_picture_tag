@@ -1,4 +1,7 @@
 require_relative 'integration_test_helper'
+
+require 'concurrent-ruby'
+
 class TestIntegrationConfig < Minitest::Test
   include IntegrationTestHelper
 
@@ -33,6 +36,16 @@ class TestIntegrationConfig < Minitest::Test
     tested 'too_large rms.jpg'
 
     assert_empty stderr
+  end
+
+  def test_config_threads_negative_is_auto
+    PictureTag.pconfig['threads'] = -1
+    assert_equal Concurrent.processor_count * 2, PictureTag::Pool.threads
+  end
+
+  def test_config_threads_positive
+    PictureTag.pconfig['threads'] = 2
+    assert_equal 2, PictureTag::Pool.threads
   end
 
   # continue on missing

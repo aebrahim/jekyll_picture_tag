@@ -6,7 +6,7 @@ class TestImageFile < Minitest::Test
   # Lifecycle
 
   def setup
-    PictureTag.stubs(preset: preset)
+    PictureTag.stubs(preset: preset, pconfig: {})
     PictureTag::Pool.start_pool
     ImageFile.any_instance.stubs(:puts)
   end

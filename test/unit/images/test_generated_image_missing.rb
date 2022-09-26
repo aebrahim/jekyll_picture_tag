@@ -26,7 +26,8 @@ class GeneratedImageMissingTest < Minitest::Test
   # Helpers
 
   def config
-    { dest_dir: '/home/loser/generated', fast_build: false, quality: 75 }
+    { dest_dir: '/home/loser/generated', fast_build: false, quality: 75,
+      pconfig: {} }
   end
 
   def destfile

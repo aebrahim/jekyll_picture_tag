@@ -17,11 +17,17 @@ module PictureTag
     @@_seen_files = nil
 
     def self.start_pool
-      @@_pool = Concurrent::ThreadPoolExecutor.new(
-        min_threads: 1, max_threads: Concurrent.processor_count,
-        max_queue: 2 * Concurrent.processor_count
-      )
       @@_seen_files = Set[]
+      # Start an ImmediateExecutor if single threaded.
+      max_threads = threads
+      if max_threads.zero?
+        @@_pool = Concurrent::ImmediateExecutor.new
+        return
+      end
+      @@_pool = Concurrent::ThreadPoolExecutor.new(
+        min_threads: 1, max_threads: max_threads,
+        max_queue: 2 * max_threads
+      )
     end
 
     def self.generate(generated_image)
@@ -46,6 +52,13 @@ module PictureTag
       @@_pool.wait_for_termination
       @@_seen_files = Set[]
       @@_pool = nil
+    end
+
+    def self.threads
+      threads = PictureTag.pconfig.fetch('threads', -1)
+      return Concurrent.processor_count * 2 if threads.negative?
+
+      threads
     end
   end
   # rubocop:enable Style/ClassVars

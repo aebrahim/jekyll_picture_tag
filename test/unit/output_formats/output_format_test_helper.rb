@@ -21,6 +21,7 @@ module OutputFormatTestHelper
   def config
     {
       preset: preset,
+      pconfig: {},
       source_images: [basic_source_stub],
       formats: %w[original],
       fallback_format: 'fallback format',

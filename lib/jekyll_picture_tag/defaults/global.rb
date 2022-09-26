@@ -5,6 +5,7 @@ module PictureTag
       'source' => '',
       'output' => 'generated',
       'suppress_warnings' => false,
+      'threads': -1,
       'relative_url' => true,
       'cdn_environments' => ['production'],
       'nomarkdown' => true,
